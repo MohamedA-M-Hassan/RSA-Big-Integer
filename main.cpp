@@ -16,6 +16,8 @@ public:
 	void setValueUsingVector(vector <unsigned long long> n);
 	vector <unsigned long long> getVectorContainer();
 	void addNewMostSignificantDigit(unsigned long long val);
+	void changeDigit(int index, unsigned long long val);
+	
 	
 	
 private:
@@ -79,4 +81,8 @@ vector <unsigned long long> BigNum::getVectorContainer() { return numberContaine
 void BigNum::addNewMostSignificantDigit(unsigned long long val)
 {
 	numberContainer.push_back(val);
+}
+void BigNum::changeDigit(int index, unsigned long long val)
+{
+	numberContainer[index] = val;
 }

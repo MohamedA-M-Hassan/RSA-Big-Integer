@@ -23,6 +23,7 @@ public:
 	void addNewMostSignificantDigit(unsigned long long val);
 	void changeDigit(int index, unsigned long long val);
 	int numberOfDigits()const;
+	string convertLongToString(unsigned long long mylong);
 	// operations
 	BigNum addOperation(const BigNum & x);
 	BigNum addOperation(vector <unsigned long long> num);
@@ -104,6 +105,14 @@ void BigNum::changeDigit(int index, unsigned long long val)
 int BigNum::numberOfDigits()const{
 	return numberContainer.size();
 }
+string BigNum::convertLongToString(unsigned long long mylong) {
+	string mystring;
+	stringstream mystream;
+	mystream << mylong;
+	mystring = mystream.str();
+	return mystring;
+}
+
 BigNum BigNum::addOperation(const BigNum & x) {
 	BigNum z ;
 	int carry = 0;

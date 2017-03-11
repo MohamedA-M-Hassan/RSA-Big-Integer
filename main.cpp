@@ -133,7 +133,7 @@ BigNum BigNum::addOperation(const BigNum & x) {
 }
 BigNum BigNum::addOperation(vector <unsigned long long> num)
 {
-	BigNum z;
+	BigNum z; 
 	unsigned long long carry = 0;
 	unsigned long long  tempInt;
 	// to check which has max digits

@@ -3,6 +3,11 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#include <algorithm>
+#include <iomanip>
+#include <bitset>
+#include <time.h>
+#include <limits>
 using namespace std;
 class BigNum
 {
@@ -17,6 +22,7 @@ public:
 	vector <unsigned long long> getVectorContainer();
 	void addNewMostSignificantDigit(unsigned long long val);
 	void changeDigit(int index, unsigned long long val);
+	int numberOfDigits()const;
 	
 	
 	
@@ -86,3 +92,7 @@ void BigNum::changeDigit(int index, unsigned long long val)
 {
 	numberContainer[index] = val;
 }
+int BigNum::numberOfDigits()const{
+	return numberContainer.size();
+}
+

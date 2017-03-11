@@ -15,6 +15,8 @@ public:
 	void setValue(unsigned long long s);//  in case pass (number) to use it in the operation
 	void setValueUsingVector(vector <unsigned long long> n);
 	vector <unsigned long long> getVectorContainer();
+	void addNewMostSignificantDigit(unsigned long long val);
+	
 	
 private:
 	vector <unsigned long long> numberContainer;
@@ -74,3 +76,7 @@ void BigNum::setValue(unsigned long long s)
 }
 void BigNum::setValueUsingVector(vector <unsigned long long> n) { numberContainer = n; }
 vector <unsigned long long> BigNum::getVectorContainer() { return numberContainer; }
+void BigNum::addNewMostSignificantDigit(unsigned long long val)
+{
+	numberContainer.push_back(val);
+}

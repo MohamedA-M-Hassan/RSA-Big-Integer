@@ -33,6 +33,7 @@ public:
 	BigNum subOperation(vector <unsigned long long> num);
 	BigNum subOperation(int num);
 
+	void operator=(const BigNum &m);
 	void removeLeadingZero();
 	void print();
 	
@@ -256,6 +257,9 @@ BigNum BigNum::subOperation(int num) {
 	return thisCopy;
 }
 
+void BigNum::operator=(const BigNum &m) {
+	numberContainer = m.numberContainer;
+}
 void BigNum::removeLeadingZero() {
 	while (1) {
 		if (numberContainer.back() == 0 && numberOfDigits()>1)

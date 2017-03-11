@@ -29,6 +29,11 @@ public:
 	BigNum getSomeDigitsFromMostSignificant(int numOfdigits);
 	
 	// comprason
+	bool greaterThan(BigNum x);
+	bool greaterThan(int x);
+	bool greaterThanOrEqual(BigNum x);
+	bool equal(const BigNum &x);
+	bool equal(int x);
 
 	// operations
 	BigNum addOperation(const BigNum & x);
@@ -237,6 +242,14 @@ BigNum BigNum::getSomeDigitsFromMostSignificant(int numOfdigits) {
 	temp.setValueUsingVector(tempContainer);
 	return temp;
 }
+string BigNum::convertLongToString(unsigned long long mylong) {
+	string mystring;
+	stringstream mystream;
+	mystream << mylong;
+	mystring = mystream.str();
+	return mystring;
+}
+
 
 BigNum BigNum::addOperation(vector <unsigned long long> num)
 {

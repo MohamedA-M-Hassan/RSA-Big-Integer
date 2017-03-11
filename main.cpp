@@ -26,6 +26,9 @@ public:
 	// operations
 	BigNum addOperation(const BigNum & x);
 	BigNum addOperation(vector <unsigned long long> num);
+
+	void removeLeadingZero();
+	
 	
 	
 	
@@ -155,3 +158,10 @@ BigNum BigNum::addOperation(vector <unsigned long long> num)
 	return z;
 }
 
+void BigNum::removeLeadingZero() {
+	while (1) {
+		if (numberContainer.back() == 0 && numberOfDigits()>1)
+			numberContainer.pop_back();
+		else break;
+	}
+}

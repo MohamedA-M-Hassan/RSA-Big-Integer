@@ -28,7 +28,8 @@ public:
 	unsigned long long getLastDigit();
 	BigNum getSomeDigitsFromMostSignificant(int numOfdigits);
 	
-	
+	// comprason
+
 	// operations
 	BigNum addOperation(const BigNum & x);
 	BigNum addOperation(vector <unsigned long long> num);
@@ -125,8 +126,28 @@ string BigNum::convertLongToString(unsigned long long mylong) {
 void BigNum::editSpecificIndex(unsigned long long newValue, int index) {
 	numberContainer[index] = newValue;
 }
+// comparason
+bool BigNum::greaterThan(BigNum x) {
+	if (this->numberOfDigits() > x.numberOfDigits()) return true;
+	else if (this->numberOfDigits() < x.numberOfDigits()) return false;
+	else // here numberOfDigits()-->(=)
+	{
+		for (int i = numberOfDigits() - 1; i >= 0; i--)
+		{
+			if (this->numberContainer[i] > x.numberContainer[i]) return true;
+			else if (this->numberContainer[i] == x.numberContainer[i]) continue;
+			else return false;
+		}
+		return false; // this for equality
+	}
+}
+bool BigNum::greaterThan(int x) {
+	if (numberContainer.size() > 1) return true;
+	if (numberContainer.size() == 1 && (numberContainer[0] > x)) return true;
+	return false;
+}
 
-
+// operations
 BigNum BigNum::addOperation(const BigNum & x) {
 	BigNum z ;
 	int carry = 0;

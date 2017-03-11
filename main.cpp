@@ -43,6 +43,7 @@ public:
 	BigNum subOperation(vector <unsigned long long> num);
 	BigNum subOperation(int num);
 	void mul_base_shift();
+	BigNum modOperation(BigNum denominator);
 	BigNum modOperation2(BigNum &denominator);
 
 	void operator=(const BigNum &m);
@@ -379,6 +380,33 @@ void BigNum::mul_base_shift()
 	vector<unsigned long long>::iterator it;
 	it = numberContainer.begin();
 	it = numberContainer.insert(it, 0);
+}
+BigNum BigNum::modOperation(BigNum denominator) {
+	if (denominator.greaterThan(*this)) return *this;
+	if (this->equal(denominator)) {	BigNum res(0); return res;	}
+	string numinatorString = this->convertBigNumToString();
+	BigNum result;
+	int iterationNum = numberContainer.size()-1;
+	bool flagFirstIteration = true;
+	while (iterationNum >= 0)
+	{
+		if (flagFirstIteration) {
+			result = numberContainer[iterationNum];
+			flagFirstIteration = false;
+		}
+			
+		else
+		{
+			result.mul_base_shift();
+			result = result.addOperation(numberContainer[iterationNum]);
+		}
+		while (result.greaterThanOrEqual(denominator))
+		{
+			result = result.subOperation(denominator);
+		}
+		iterationNum--;
+	}
+	return result;
 }
 BigNum BigNum::modOperation2(BigNum &denominator)
 {

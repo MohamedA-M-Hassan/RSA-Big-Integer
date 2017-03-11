@@ -25,6 +25,9 @@ public:
 	int numberOfDigits()const;
 	string convertLongToString(unsigned long long mylong);
 	void editSpecificIndex(unsigned long long newValue, int index);
+	unsigned long long getLastDigit();
+	BigNum getSomeDigitsFromMostSignificant(int numOfdigits);
+	
 	
 	// operations
 	BigNum addOperation(const BigNum & x);
@@ -156,6 +159,30 @@ BigNum BigNum::addOperation(const BigNum & x) {
 	}
 	return z;
 }
+unsigned long long BigNum::getLastDigit() {
+	return numberContainer[numberContainer.size() - 1];
+}
+BigNum BigNum::getSomeDigitsFromMostSignificant(int numOfdigits) {
+	if (numOfdigits == 1)
+	{
+		unsigned long long  tempInt = getLastDigit();
+		BigNum temp;temp.setValue(tempInt);
+		return temp;
+	}
+	if (this->numberOfDigits() <= numOfdigits) return *this;
+	BigNum temp;
+	vector<unsigned long long>thisContainer;thisContainer = this->getVectorContainer();int index = thisContainer.size() - 1;
+	vector<unsigned long long>tempContainer;	tempContainer.resize(numOfdigits);
+	while (numOfdigits != 0)
+	{
+		tempContainer[numOfdigits - 1] = thisContainer[index];
+		index--;
+		numOfdigits--;
+	}
+	temp.setValueUsingVector(tempContainer);
+	return temp;
+}
+
 BigNum BigNum::addOperation(vector <unsigned long long> num)
 {
 	BigNum z; 

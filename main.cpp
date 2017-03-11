@@ -25,9 +25,13 @@ public:
 	int numberOfDigits()const;
 	string convertLongToString(unsigned long long mylong);
 	void editSpecificIndex(unsigned long long newValue, int index);
+	
 	// operations
 	BigNum addOperation(const BigNum & x);
 	BigNum addOperation(vector <unsigned long long> num);
+	BigNum subOperation(BigNum x);
+	BigNum subOperation(vector <unsigned long long> num);
+	BigNum subOperation(int num);
 
 	void removeLeadingZero();
 	void print();
@@ -106,6 +110,7 @@ void BigNum::changeDigit(int index, unsigned long long val)
 int BigNum::numberOfDigits()const{
 	return numberContainer.size();
 }
+// after writing it--> i discovered : to_string funcion in c++11
 string BigNum::convertLongToString(unsigned long long mylong) {
 	string mystring;
 	stringstream mystream;
@@ -172,6 +177,83 @@ BigNum BigNum::addOperation(vector <unsigned long long> num)
 		z.setValue(tempInt);
 	}
 	return z;
+}
+BigNum BigNum::subOperation(BigNum x) {
+	// let (this > x) this greater than x
+	if (this->equal(x))
+	{
+		BigNum result(0);
+		return result;
+	}
+	BigNum thisCopy = *this;
+	BigNum result;
+	unsigned long long carry;
+	unsigned long long tempInt;
+	int maxDigit = numberContainer.size();
+	for (int i = 0; i < maxDigit; i++)
+	{
+		if (thisCopy.numberContainer[i] >= x.numberContainer[i])
+			tempInt = thisCopy.numberContainer[i] - x.numberContainer[i];
+		else
+		{
+			// borrow from next digit
+			thisCopy.editSpecificIndex(thisCopy.numberContainer[i + 1] - 1, i + 1);
+			carry = 1000000000;
+			tempInt = (carry + thisCopy.numberContainer[i]);
+			tempInt -= x.numberContainer[i];
+		}
+		result.numberContainer.push_back(tempInt);
+	}
+	result.removeLeadingZero();
+	return result;
+}
+BigNum BigNum::subOperation(vector <unsigned long long> num) {
+	// let (this > x) this greater than x
+	BigNum thisCopy = *this;
+	BigNum result;
+	unsigned long long carry;
+	unsigned long long tempInt;
+	//if (this->numberOfDigits() >= num.size()) maxDigit = this->numberOfDigits();
+	//else								  maxDigit = num.size();
+	for (int i = 0; i < this->numberOfDigits(); i++)
+	{
+		if (i < num.size())
+		{
+			if (thisCopy.numberContainer[i] >= num[i])
+				tempInt = thisCopy.numberContainer[i] - num[i];
+			else
+			{
+				// borrow from next digit
+				thisCopy.editSpecificIndex(thisCopy.numberContainer[i + 1] - 1, i + 1);
+				carry = 1000000000;
+				tempInt = (carry + thisCopy.numberContainer[i]);
+				tempInt -= num[i];
+			}
+		}
+		else tempInt = thisCopy.numberContainer[i];
+		result.numberContainer.push_back(tempInt);
+	}
+	result.removeLeadingZero();
+	return result;
+}
+BigNum BigNum::subOperation(int num) {
+	// let (this > x) this greater than x
+	BigNum thisCopy = *this;
+	int index = 1;
+	while (true)
+	{
+		if (thisCopy.numberContainer[0] >= num)
+		{
+			thisCopy.numberContainer[0] -= num; break;
+		}
+		else
+		{
+			if (thisCopy.numberContainer[index] > 0)
+				thisCopy.numberContainer[index] -= 1, thisCopy.numberContainer[index - 1] += 1000000000;
+			index++;
+		}
+	}
+	return thisCopy;
 }
 
 void BigNum::removeLeadingZero() {

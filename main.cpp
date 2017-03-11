@@ -28,6 +28,8 @@ public:
 	BigNum addOperation(vector <unsigned long long> num);
 
 	void removeLeadingZero();
+	void print();
+	
 	
 	
 	
@@ -163,5 +165,17 @@ void BigNum::removeLeadingZero() {
 		if (numberContainer.back() == 0 && numberOfDigits()>1)
 			numberContainer.pop_back();
 		else break;
+	}
+}
+void BigNum::print() {
+	if (numberContainer.size() == 0) { cout << "empty number" << endl;return; }
+	removeLeadingZero();
+	int i = numberContainer.size() - 1;
+	while (i != -1) {
+		if (i == (numberContainer.size() - 1))
+			cout << numberContainer[i];
+		else
+			cout << setfill('0') << setw(9) << numberContainer[i];
+		i--;
 	}
 }

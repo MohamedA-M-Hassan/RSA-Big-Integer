@@ -14,6 +14,7 @@ public:
 	void setValue(string s);//in case pass ( string ): in the initial state
 	void setValue(unsigned long long s);//  in case pass (number) to use it in the operation
 	void setValueUsingVector(vector <unsigned long long> n);
+	vector <unsigned long long> getVectorContainer();
 	
 private:
 	vector <unsigned long long> numberContainer;
@@ -72,3 +73,4 @@ void BigNum::setValue(unsigned long long s)
 	numberContainer.push_back(s);
 }
 void BigNum::setValueUsingVector(vector <unsigned long long> n) { numberContainer = n; }
+vector <unsigned long long> BigNum::getVectorContainer() { return numberContainer; }

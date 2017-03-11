@@ -23,6 +23,10 @@ public:
 	void addNewMostSignificantDigit(unsigned long long val);
 	void changeDigit(int index, unsigned long long val);
 	int numberOfDigits()const;
+	// operations
+	BigNum addOperation(const BigNum & x);
+	BigNum addOperation(vector <unsigned long long> num);
+	
 	
 	
 	
@@ -94,5 +98,60 @@ void BigNum::changeDigit(int index, unsigned long long val)
 }
 int BigNum::numberOfDigits()const{
 	return numberContainer.size();
+}
+BigNum BigNum::addOperation(const BigNum & x) {
+	BigNum z ;
+	int carry = 0;
+	unsigned long long  tempInt;
+	// to check which has max digits
+	int minDigit , maxDigit_, yDigit = numberContainer.size(),xDigit=x.numberContainer.size();
+	// y -> this and x is x
+	
+	if (yDigit <= xDigit) minDigit = yDigit , maxDigit_=xDigit ;
+	else	minDigit = xDigit , maxDigit_ = yDigit;
+	z.numberContainer.reserve(  maxDigit_ + 1);
+	int i;
+	for (i = 0; i < maxDigit_   ; i++) // we use maxDigit+1 not maxDigit:--> if there is a (carry) in last step
+	{
+		
+		if (i < minDigit) tempInt = this->numberContainer[i] + x.numberContainer[i]+ carry;
+		else if (carry == 0) { z.numberContainer.push_back(numberContainer[i]); continue; }
+		else tempInt = this->numberContainer[i] + carry;
+		if (tempInt > 999999999)
+		{
+			tempInt -= 1000000000;// 1 200 000 000 - 1 000 000 000 = 200 000 000
+			carry = 1;
+		}
+		else
+		{
+			carry = 0;
+		}
+		z.numberContainer.push_back(tempInt);
+		if (i+1 == maxDigit_ && carry == 1) maxDigit_++;
+	}
+	return z;
+}
+BigNum BigNum::addOperation(vector <unsigned long long> num)
+{
+	BigNum z;
+	unsigned long long carry = 0;
+	unsigned long long  tempInt;
+	// to check which has max digits
+	int maxDigit;
+	if (this->numberOfDigits() >= num.size()) maxDigit = this->numberOfDigits();
+	else								  maxDigit = num.size();
+	for (int i = 0; i < maxDigit + 1; i++) // we use maxDigit+1 not maxDigit:--> if there is a (carry) in last step
+	{
+		if (i == maxDigit && carry == 0) return z; // to not print leading zero
+		tempInt = this->numberContainer[i] + num[i] + carry;
+		if (tempInt > 999999999)
+		{
+			tempInt -= 1000000000;// 1 200 000 000 - 1 000 000 000 = 200 000 000
+			carry = 1;
+		}
+		else carry = 0;
+		z.setValue(tempInt);
+	}
+	return z;
 }
 

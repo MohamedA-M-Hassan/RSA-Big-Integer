@@ -27,6 +27,8 @@ public:
 	void editSpecificIndex(unsigned long long newValue, int index);
 	unsigned long long getLastDigit();
 	BigNum getSomeDigitsFromMostSignificant(int numOfdigits);
+	string convertLongToString(unsigned long long mylong);
+	string convertBigNumToString();
 	
 	// comprason
 	bool greaterThan(BigNum x);
@@ -247,6 +249,31 @@ string BigNum::convertLongToString(unsigned long long mylong) {
 	stringstream mystream;
 	mystream << mylong;
 	mystring = mystream.str();
+	return mystring;
+}
+string BigNum::convertBigNumToString() {
+	string mystring;
+	string temp;
+	int numOfDigit = numberContainer.size()-1;
+	int numOfLeadingZero;
+	bool firstTime = true;
+	while (numOfDigit >=0 )
+	{
+		stringstream mystream;
+		mystream << numberContainer[numOfDigit];
+		temp = mystream.str();
+		numOfLeadingZero = temp.size();
+		// if there is leading zero
+		if (firstTime) { firstTime = false; goto firstOnly; }
+		while (9-numOfLeadingZero > 0)
+		{
+			mystring = mystring + '0' ;
+			numOfLeadingZero++;
+		}
+		firstOnly:
+		mystring = mystring + mystream.str();
+		numOfDigit--;
+	}
 	return mystring;
 }
 

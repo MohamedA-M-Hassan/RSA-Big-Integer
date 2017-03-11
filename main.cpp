@@ -160,6 +160,26 @@ bool BigNum::greaterThanOrEqual(BigNum x) {
 		return true; // this for equality
 	}
 }
+bool BigNum::equal(const BigNum &x) {
+	if (this->numberOfDigits() > x.numberOfDigits()) return false;
+	else if (this->numberOfDigits() < x.numberOfDigits()) return false;
+	else // here numberOfDigits()-->(=)
+	{
+		for (int i = numberOfDigits() - 1; i >= 0; i--)
+		{
+			if (this->numberContainer[i] > x.numberContainer[i]) return false;
+			else if (this->numberContainer[i] == x.numberContainer[i]) continue;
+			else return false;
+		}
+		return true; // this for equality
+	}
+}
+bool BigNum::equal(int x) {
+	if (numberContainer.size() == 1 && numberContainer[0] == x)
+		return true;
+	return false;
+}
+
 
 // operations
 BigNum BigNum::addOperation(const BigNum & x) {

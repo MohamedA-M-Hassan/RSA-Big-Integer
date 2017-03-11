@@ -146,6 +146,20 @@ bool BigNum::greaterThan(int x) {
 	if (numberContainer.size() == 1 && (numberContainer[0] > x)) return true;
 	return false;
 }
+bool BigNum::greaterThanOrEqual(BigNum x) {
+	if (this->numberOfDigits() > x.numberOfDigits()) return true;
+	else if (this->numberOfDigits() < x.numberOfDigits()) return false;
+	else // here numberOfDigits()-->(=)
+	{
+		for (int i = numberOfDigits() - 1; i >= 0; i--)
+		{
+			if (this->numberContainer[i] > x.numberContainer[i]) return true;
+			else if (this->numberContainer[i] == x.numberContainer[i]) continue;
+			else return false;
+		}
+		return true; // this for equality
+	}
+}
 
 // operations
 BigNum BigNum::addOperation(const BigNum & x) {

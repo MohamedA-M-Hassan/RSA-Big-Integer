@@ -23,7 +23,6 @@ public:
 	void addNewMostSignificantDigit(unsigned long long val);
 	void changeDigit(int index, unsigned long long val);
 	int numberOfDigits()const;
-	string convertLongToString(unsigned long long mylong);
 	void editSpecificIndex(unsigned long long newValue, int index);
 	unsigned long long getLastDigit();
 	BigNum getSomeDigitsFromMostSignificant(int numOfdigits);
@@ -43,6 +42,7 @@ public:
 	BigNum subOperation(BigNum x);
 	BigNum subOperation(vector <unsigned long long> num);
 	BigNum subOperation(int num);
+	void mul_base_shift();
 
 	void operator=(const BigNum &m);
 	void removeLeadingZero();
@@ -122,6 +122,9 @@ void BigNum::changeDigit(int index, unsigned long long val)
 int BigNum::numberOfDigits()const{
 	return numberContainer.size();
 }
+void BigNum::editSpecificIndex(unsigned long long newValue, int index) {
+	numberContainer[index] = newValue;
+}
 // after writing it--> i discovered : to_string funcion in c++11
 string BigNum::convertLongToString(unsigned long long mylong) {
 	string mystring;
@@ -130,9 +133,33 @@ string BigNum::convertLongToString(unsigned long long mylong) {
 	mystring = mystream.str();
 	return mystring;
 }
-void BigNum::editSpecificIndex(unsigned long long newValue, int index) {
-	numberContainer[index] = newValue;
+string BigNum::convertBigNumToString() {
+	string mystring;
+	string temp;
+	int numOfDigit = numberContainer.size()-1;
+	int numOfLeadingZero;
+	bool firstTime = true;
+	while (numOfDigit >=0 )
+	{
+		stringstream mystream;
+		mystream << numberContainer[numOfDigit];
+		temp = mystream.str();
+		numOfLeadingZero = temp.size();
+		// if there is leading zero
+		if (firstTime) { firstTime = false; goto firstOnly; }
+		while (9-numOfLeadingZero > 0)
+		{
+			mystring = mystring + '0' ;
+			numOfLeadingZero++;
+		}
+		firstOnly:
+		mystring = mystring + mystream.str();
+		numOfDigit--;
+	}
+	return mystring;
 }
+
+
 // comparason
 bool BigNum::greaterThan(BigNum x) {
 	if (this->numberOfDigits() > x.numberOfDigits()) return true;
@@ -244,38 +271,6 @@ BigNum BigNum::getSomeDigitsFromMostSignificant(int numOfdigits) {
 	temp.setValueUsingVector(tempContainer);
 	return temp;
 }
-string BigNum::convertLongToString(unsigned long long mylong) {
-	string mystring;
-	stringstream mystream;
-	mystream << mylong;
-	mystring = mystream.str();
-	return mystring;
-}
-string BigNum::convertBigNumToString() {
-	string mystring;
-	string temp;
-	int numOfDigit = numberContainer.size()-1;
-	int numOfLeadingZero;
-	bool firstTime = true;
-	while (numOfDigit >=0 )
-	{
-		stringstream mystream;
-		mystream << numberContainer[numOfDigit];
-		temp = mystream.str();
-		numOfLeadingZero = temp.size();
-		// if there is leading zero
-		if (firstTime) { firstTime = false; goto firstOnly; }
-		while (9-numOfLeadingZero > 0)
-		{
-			mystring = mystring + '0' ;
-			numOfLeadingZero++;
-		}
-		firstOnly:
-		mystring = mystring + mystream.str();
-		numOfDigit--;
-	}
-	return mystring;
-}
 
 
 BigNum BigNum::addOperation(vector <unsigned long long> num)
@@ -377,6 +372,12 @@ BigNum BigNum::subOperation(int num) {
 		}
 	}
 	return thisCopy;
+}
+void BigNum::mul_base_shift()
+{
+	vector<unsigned long long>::iterator it;
+	it = numberContainer.begin();
+	it = numberContainer.insert(it, 0);
 }
 
 void BigNum::operator=(const BigNum &m) {

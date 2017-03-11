@@ -24,6 +24,7 @@ public:
 	void changeDigit(int index, unsigned long long val);
 	int numberOfDigits()const;
 	string convertLongToString(unsigned long long mylong);
+	void editSpecificIndex(unsigned long long newValue, int index);
 	// operations
 	BigNum addOperation(const BigNum & x);
 	BigNum addOperation(vector <unsigned long long> num);
@@ -112,6 +113,10 @@ string BigNum::convertLongToString(unsigned long long mylong) {
 	mystring = mystream.str();
 	return mystring;
 }
+void BigNum::editSpecificIndex(unsigned long long newValue, int index) {
+	numberContainer[index] = newValue;
+}
+
 
 BigNum BigNum::addOperation(const BigNum & x) {
 	BigNum z ;

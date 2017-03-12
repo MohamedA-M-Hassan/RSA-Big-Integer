@@ -49,6 +49,7 @@ public:
 	BigNum modOperation2(BigNum &denominator);
 	BigNum divByTwo();
 	BigNum divOperation2(BigNum denominator);
+	BigNum divOperation(BigNum denominator);
 
 	void operator=(const BigNum &m);
 	void removeLeadingZero();
@@ -525,6 +526,37 @@ BigNum BigNum::divByTwo() {
 	res.removeLeadingZero();
 	return res;
 }
+BigNum BigNum::divOperation(BigNum denominator) {
+	BigNum leftSide(0);
+	if (denominator.greaterThan(*this))		return leftSide;
+	leftSide.numberContainer[0] = 1;
+	if (this->equal(denominator))	return leftSide;
+	if (denominator.equal(1))		return *this;
+	if (denominator.equal(2))		return this->divByTwo();
+	BigNum rightSide(numberContainer); // rightSide = numinator || my range in the search will be from 1 to numinator
+	BigNum mid = rightSide.addOperation(leftSide).addOperation(1);
+	mid = mid.divByTwo();
+	BigNum temp;
+	while (rightSide.greaterThan(leftSide))
+	{
+		temp = mid.mulOperation(denominator);
+		if (this->greaterThan(temp))
+		{
+			leftSide = mid;
+			mid = rightSide.addOperation(leftSide).addOperation(1).divByTwo();
+		}
+		else if (this->equal(temp))
+		{
+			return mid;
+		}
+		else {
+			rightSide = mid.subOperation(1);
+			mid = rightSide.addOperation(leftSide).addOperation(1).divByTwo();
+		}
+	}
+	return mid;
+}
+
 BigNum BigNum::divOperation2(BigNum denominator) {
 	BigNum devResult;devResult.setValue(0);
 	if (denominator.greaterThan(*this))

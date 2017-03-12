@@ -51,6 +51,7 @@ public:
 	BigNum divByTwo();
 	BigNum divOperation2(BigNum denominator);
 	BigNum divOperation(BigNum denominator);
+	BigNum powerOperation(BigNum power, BigNum modulus);
 
 	void operator=(const BigNum &m);
 	void removeLeadingZero();
@@ -681,7 +682,49 @@ BigNum BigNum::divOperation2(BigNum denominator) {
 	}
 	return devResult;
 }
-
+BigNum BigNum::powerOperation(BigNum power,BigNum modulus) {
+	BigNum result(1);
+	if (power.equal(0))
+		return result;  // identity matrix
+	else if (power.equal(1))
+		return *this;
+	BigNum multiplies = *this;
+	while (1)
+	{
+		if (power.equal(1))
+		{
+			result = result.mulOperation(multiplies).modOperation(modulus);
+			break;
+		}
+		else if (!power.isEven())
+		{
+			result = result.mulOperation(multiplies).modOperation(modulus);
+		}
+		multiplies = multiplies.mulOperation(multiplies);
+		multiplies= multiplies.modOperation(modulus);
+		power = power.divByTwo();
+		//power.print();cout << endl;
+	}
+return result;
+}
+/*
+//function Matrix_ModExp(Matrix A, int b, int c)
+// if (b == 0):
+//     return I  // The identity matrix
+//if (b mod 2 == 1):
+//return (A * Matrix_ModExp(A, b - 1, c)) mod c
+Matrix D := Matrix_ModExp(A, b / 2, c)
+return (D * D) mod c
+*/
+//A^b mod c
+/*
+Function exp_by_squaring(x, n, mod)
+if n < 0  then return exp_by_squaring(1 / x, -n);
+else if n = 0  then return  1;
+else if n = 1  then return  x ;
+else if n is even  then return exp_by_squaring(x * x,  n / 2);
+else if n is odd  then return x * exp_by_squaring(x * x, n / 2);
+*/
 
 
 

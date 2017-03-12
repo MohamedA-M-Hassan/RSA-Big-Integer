@@ -394,25 +394,26 @@ BigNum BigNum::modOperation(BigNum denominator) {
 	if (this->equal(denominator)) {	BigNum res(0); return res;	}
 	string numinatorString = this->convertBigNumToString();
 	BigNum result;
-	int iterationNum = numberContainer.size()-1;
+	int iterationNum = numinatorString.size()-1;
 	bool flagFirstIteration = true;
-	while (iterationNum >= 0)
+	int i = 0;
+	while (iterationNum >= i)
 	{
 		if (flagFirstIteration) {
-			result = numberContainer[iterationNum];
+			result.setValue(numinatorString[i]-'0');
 			flagFirstIteration = false;
-		}
-			
+		}	
 		else
 		{
-			result.mul_base_shift();
-			result = result.addOperation(numberContainer[iterationNum]);
+			result.mulWithTen();
+			int trial = numinatorString[i] - '0';
+			result = result.addOperation(trial);
 		}
 		while (result.greaterThanOrEqual(denominator))
 		{
 			result = result.subOperation(denominator);
 		}
-		iterationNum--;
+		i++;
 	}
 	return result;
 }

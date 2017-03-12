@@ -42,6 +42,7 @@ public:
 	BigNum subOperation(BigNum x);
 	BigNum subOperation(vector <unsigned long long> num);
 	BigNum subOperation(int num);
+	void mulWithTen();
 	void mul_base_shift();
 	BigNum modOperation(BigNum denominator);
 	BigNum modOperation2(BigNum &denominator);
@@ -382,6 +383,12 @@ void BigNum::mul_base_shift()
 	it = numberContainer.begin();
 	it = numberContainer.insert(it, 0);
 }
+void BigNum::mulWithTen() {
+	string temp=this->convertBigNumToString();
+	temp = temp + "0";
+	this->setValue(temp);
+}
+
 BigNum BigNum::modOperation(BigNum denominator) {
 	if (denominator.greaterThan(*this)) return *this;
 	if (this->equal(denominator)) {	BigNum res(0); return res;	}

@@ -47,6 +47,7 @@ public:
 	BigNum mulOperation(const BigNum &x);
 	BigNum modOperation(BigNum denominator);
 	BigNum modOperation2(BigNum &denominator);
+	BigNum divByTwo();
 
 	void operator=(const BigNum &m);
 	void removeLeadingZero();
@@ -495,6 +496,35 @@ BigNum BigNum::modOperation2(BigNum &denominator)
 			return numinator;
 	}
 }
+BigNum BigNum::divByTwo() {
+	int counter = numberContainer.size() - 1;
+	BigNum res;
+	vector <unsigned long long> resVector;
+	bool flag = false;
+	unsigned long long temp;
+	while (counter >= 0)
+	{
+		if (flag) {
+			temp = numberContainer[counter] + 1000000000;
+			resVector.push_back(temp / 2);
+			if (temp % 2 == 0)
+				flag = false;		// don't need to handle (else -> flag= True) because flag already at this time is equal true :D
+		}
+		else
+		{
+			temp = numberContainer[counter];
+			resVector.push_back(temp / 2);
+			if (temp % 2 == 1)
+				flag = true;	// don't need to handle (else -> flag= false) because flag already at this time is equal false :D
+		}
+		counter--;
+	}
+	reverse(resVector.begin(), resVector.end());
+	res.setValueUsingVector(resVector);
+	res.removeLeadingZero();
+	return res;
+}
+
 
 
 void BigNum::operator=(const BigNum &m) {

@@ -91,6 +91,7 @@ BigNum::BigNum(vector <unsigned long long> &v) {
 }
 
 void BigNum::setValue(string s) {
+	numberContainer.empty();
 	string temp;
 	int counter = 0;
 	for (int i = s.size() - 1;i >= 0;i = i - 9)

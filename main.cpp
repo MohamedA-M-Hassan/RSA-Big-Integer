@@ -28,7 +28,8 @@ public:
 	BigNum getSomeDigitsFromMostSignificant(int numOfdigits);
 	string convertLongToString(unsigned long long mylong);
 	string convertBigNumToString();
-	
+	bool isEven();
+
 	// comprason
 	bool greaterThan(BigNum x);
 	bool greaterThan(int x);
@@ -166,6 +167,12 @@ string BigNum::convertBigNumToString() {
 	}
 	return mystring;
 }
+bool BigNum::isEven() {
+	if (numberContainer[0] & 1)
+		return false;
+	return true;
+}
+
 
 
 // comparason

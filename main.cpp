@@ -48,6 +48,7 @@ public:
 	BigNum modOperation(BigNum denominator);
 	BigNum modOperation2(BigNum &denominator);
 	BigNum divByTwo();
+	BigNum divOperation2(BigNum denominator);
 
 	void operator=(const BigNum &m);
 	void removeLeadingZero();
@@ -524,6 +525,60 @@ BigNum BigNum::divByTwo() {
 	res.removeLeadingZero();
 	return res;
 }
+BigNum BigNum::divOperation2(BigNum denominator) {
+	BigNum devResult;devResult.setValue(0);
+	if (denominator.greaterThan(*this))
+		return devResult;
+	if (this->equal(denominator))
+	{
+		devResult.editSpecificIndex(1, 0);
+		return devResult;
+	}
+	BigNum numinator = *this; // it is updated each iteration in the operation main loop
+	BigNum rem; //remainder
+	vector<BigNum>multiplesOfDenominator;
+	//multiplesOfDenominator			   
+	bool remainderFlag = false;
+	// push  1x, 2x , 4x , 8x
+	multiplesOfDenominator.push_back(denominator);
+	int c = 2;
+	while (c<10)
+	{
+		BigNum temp;temp.setValue(c);
+		multiplesOfDenominator.push_back(denominator.mulOperation(temp));
+		c *= 2;
+	}
+	while (!remainderFlag) {
+		int index = -1;
+		int tempInt = multiplesOfDenominator[0].numberOfDigits();
+		BigNum temp = numinator.getSomeDigitsFromMostSignificant(tempInt);
+		for (int i = 0; i < 4; i++)
+		{
+			// let 85725 numinatur and 37 denominator : compare 85 with 37		
+			if (temp.greaterThanOrEqual(multiplesOfDenominator[i]))
+			{
+				index = i;
+			}
+			else if (index == -1 && numinator.numberOfDigits() > denominator.numberOfDigits())
+			{
+				i = -1;
+				temp = numinator.getSomeDigitsFromMostSignificant(tempInt + 1);
+			}
+		}
+		//here there are 2 usage for (result) vector
+		//first usage for result:
+		vector <unsigned long long> result(numinator.numberOfDigits() - temp.numberOfDigits()); // initialize to zeros
+		if (index == 0 || index == 1)result.push_back(index + 1); else if (index == 2)result.push_back(4); else result.push_back(8);
+		devResult = devResult.addOperation(result);
+		// second usage for result:
+		result = multiplesOfDenominator[index].getVectorContainer();
+		numinator = numinator.subOperation(result);
+		if (!numinator.greaterThanOrEqual(denominator))
+			return devResult;
+	}
+	return devResult;
+}
+
 
 
 

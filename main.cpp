@@ -44,6 +44,7 @@ public:
 	BigNum subOperation(int num);
 	void mulWithTen();
 	void mul_base_shift();
+	BigNum mulOperation(const BigNum &x);
 	BigNum modOperation(BigNum denominator);
 	BigNum modOperation2(BigNum &denominator);
 
@@ -388,7 +389,35 @@ void BigNum::mulWithTen() {
 	temp = temp + "0";
 	this->setValue(temp);
 }
+BigNum BigNum::mulOperation(const BigNum & x)
+{
+	BigNum result;
+	int num1_digitsNum = x.numberOfDigits();
+	int num2_digitsNum = numberContainer.size();
+	//vector <unsigned long long> res(num1_digitsNum + num2_digitsNum);
+	vector <unsigned long long> &res = result.numberContainer;
+	res.resize(num1_digitsNum + num2_digitsNum);
 
+	unsigned long long carry = 0;
+
+	for (int i = 0; i < num1_digitsNum; i++) // we use maxDigit+1 not maxDigit:--> if there is a (carry) in last step
+	{
+		for (int j = 0; j < num2_digitsNum; j++)
+		{
+			res[i + j] += (x.numberContainer[i] * this->numberContainer[j]);// + carry; 
+			int counter = 0;
+			while (res[i + j + counter] > 999999999)
+			{
+				carry = res[i + j + counter] / 1000000000;
+				res[i + j + counter] -= (carry * (unsigned long long)1000000000);
+				counter++;
+				res[i + j + counter] += carry;
+			}
+		}
+	}
+	result.removeLeadingZero();
+	return result;
+}
 BigNum BigNum::modOperation(BigNum denominator) {
 	if (denominator.greaterThan(*this)) return *this;
 	if (this->equal(denominator)) {	BigNum res(0); return res;	}

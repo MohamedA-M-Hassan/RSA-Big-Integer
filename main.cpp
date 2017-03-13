@@ -323,26 +323,37 @@ BigNum BigNum::addOperation(int & x) {
 }
 BigNum BigNum::addOperation(vector <unsigned long long> num)
 {
-	BigNum z; 
-	unsigned long long carry = 0;
+	BigNum  n1, n2(num);
+	n1 = *this;
+	int carry = 0;
+	int n1NumOfDigit = numberContainer.size(), n2NumOfDigit =num.size();
 	unsigned long long  tempInt;
-	// to check which has max digits
-	int maxDigit;
-	if (this->numberOfDigits() >= num.size()) maxDigit = this->numberOfDigits();
-	else								  maxDigit = num.size();
-	for (int i = 0; i < maxDigit + 1; i++) // we use maxDigit+1 not maxDigit:--> if there is a (carry) in last step
+	if (n2NumOfDigit > n1NumOfDigit) {
+		n1.numberContainer.swap(n2.numberContainer); 
+	}
+	//z.numberContainer.reserve(  n1NumOfDigit + 1);
+	int i;
+	for (i = 0; i < n1NumOfDigit; i++) // we use maxDigit+1 not maxDigit:--> if there is a (carry) in last step
 	{
-		if (i == maxDigit && carry == 0) return z; // to not print leading zero
-		tempInt = this->numberContainer[i] + num[i] + carry;
+		if (i < n2NumOfDigit)
+			tempInt = n1.numberContainer[i] + n2.numberContainer[i] + carry;
+		else if (carry == 1) { tempInt = n1.numberContainer[i] + carry; }
+		else break; // no more digits and carry = 0	
 		if (tempInt > 999999999)
 		{
 			tempInt -= 1000000000;// 1 200 000 000 - 1 000 000 000 = 200 000 000
 			carry = 1;
 		}
-		else carry = 0;
-		z.setValue(tempInt);
+		else
+		{
+			carry = 0;
+		}
+		n1.numberContainer[i] = tempInt;
 	}
-	return z;
+	if (carry) {
+		n1.numberContainer.push_back(1);
+	}
+	return n1;
 }
 BigNum BigNum::subOperation(BigNum x) {
 	// let (this > x) this greater than x

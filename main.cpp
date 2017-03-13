@@ -372,28 +372,43 @@ BigNum BigNum::subOperation(BigNum x) {
 }
 BigNum BigNum::subOperation(vector <unsigned long long> num) {
 	// let (this > x) this greater than x
+	if (this->equal(num))
+	{
+		BigNum result(0);
+		return result;
+	}
 	BigNum thisCopy = *this;
 	BigNum result;
-	unsigned long long carry;
 	unsigned long long tempInt;
-	//if (this->numberOfDigits() >= num.size()) maxDigit = this->numberOfDigits();
-	//else								  maxDigit = num.size();
-	for (int i = 0; i < this->numberOfDigits(); i++)
+	int maxDigit = numberContainer.size();
+	int minDigit = num.size();
+	int index;
+	for (int i = 0; i < maxDigit; i++)
 	{
-		if (i < num.size())
+		if (i >= minDigit)
+		{
+			result.numberContainer.push_back(thisCopy.numberContainer[i]);
+			continue;
+		}
+		index = i + 1;
+		while (true)
 		{
 			if (thisCopy.numberContainer[i] >= num[i])
-				tempInt = thisCopy.numberContainer[i] - num[i];
+			{
+				tempInt = thisCopy.numberContainer[i] - num[i]; break;
+			}
+			// borrow from next digit
 			else
 			{
-				// borrow from next digit
-				thisCopy.editSpecificIndex(thisCopy.numberContainer[i + 1] - 1, i + 1);
-				carry = 1000000000;
-				tempInt = (carry + thisCopy.numberContainer[i]);
-				tempInt -= num[i];
+				if (thisCopy.numberContainer[index] > 0)
+					while (index > i)
+					{
+						thisCopy.numberContainer[index] -= 1, thisCopy.numberContainer[index - 1] += 1000000000;
+						index--;
+					}
+				index++;
 			}
 		}
-		else tempInt = thisCopy.numberContainer[i];
 		result.numberContainer.push_back(tempInt);
 	}
 	result.removeLeadingZero();

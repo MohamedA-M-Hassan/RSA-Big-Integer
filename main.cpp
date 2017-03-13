@@ -249,23 +249,22 @@ bool BigNum::equal(vector <unsigned long long> &x) {
 
 // operations
 BigNum BigNum::addOperation(const BigNum & x) {
-	BigNum z ;
+	BigNum z , n1 , n2;
+	n1 = *this, n2 = x;
 	int carry = 0;
+	int n1NumOfDigit = numberContainer.size(), n2NumOfDigit = x.numberContainer.size();
 	unsigned long long  tempInt;
-	// to check which has max digits
-	int minDigit , maxDigit_, yDigit = numberContainer.size(),xDigit=x.numberContainer.size();
-	// y -> this and x is x
-	
-	if (yDigit <= xDigit) minDigit = yDigit , maxDigit_=xDigit ;
-	else	minDigit = xDigit , maxDigit_ = yDigit;
-	z.numberContainer.reserve(  maxDigit_ + 1);
+	if (n2NumOfDigit > n1NumOfDigit) {
+		n1.numberContainer.swap(n2.numberContainer); //make sure a has more or equal amount of digits than b
+	}
+	z.numberContainer.reserve(  n1NumOfDigit + 1);
 	int i;
-	for (i = 0; i < maxDigit_   ; i++) // we use maxDigit+1 not maxDigit:--> if there is a (carry) in last step
+	for (i = 0; i < n1NumOfDigit ; i++) // we use maxDigit+1 not maxDigit:--> if there is a (carry) in last step
 	{
-		
-		if (i < minDigit) tempInt = this->numberContainer[i] + x.numberContainer[i]+ carry;
-		else if (carry == 0) { z.numberContainer.push_back(numberContainer[i]); continue; }
-		else tempInt = this->numberContainer[i] + carry;
+		if (i < n2NumOfDigit)
+			tempInt = n1.numberContainer[i] + n2.numberContainer[i]+ carry;
+		else if (carry == 1) { tempInt = n1.numberContainer[i] + carry; }
+		else break; // no more digits and carry = 0	
 		if (tempInt > 999999999)
 		{
 			tempInt -= 1000000000;// 1 200 000 000 - 1 000 000 000 = 200 000 000
@@ -276,7 +275,9 @@ BigNum BigNum::addOperation(const BigNum & x) {
 			carry = 0;
 		}
 		z.numberContainer.push_back(tempInt);
-		if (i+1 == maxDigit_ && carry == 1) maxDigit_++;
+	}
+	if (carry) {
+		z.numberContainer.push_back(1);
 	}
 	return z;
 }

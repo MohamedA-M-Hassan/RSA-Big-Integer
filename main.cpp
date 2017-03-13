@@ -427,7 +427,11 @@ BigNum BigNum::subOperation(int num) {
 		else
 		{
 			if (thisCopy.numberContainer[index] > 0)
-				thisCopy.numberContainer[index] -= 1, thisCopy.numberContainer[index - 1] += 1000000000;
+				while (index > 0)
+				{
+					thisCopy.numberContainer[index] -= 1, thisCopy.numberContainer[index - 1] += 1000000000;
+					index--;
+				}
 			index++;
 		}
 	}

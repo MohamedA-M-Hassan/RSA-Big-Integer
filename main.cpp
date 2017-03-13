@@ -36,6 +36,7 @@ public:
 	bool greaterThanOrEqual(BigNum x);
 	bool equal(const BigNum &x);
 	bool equal(int x);
+	bool equal(vector <unsigned long long> &x);
 
 	// operations
 	BigNum addOperation(const BigNum & x);
@@ -228,6 +229,21 @@ bool BigNum::equal(int x) {
 	if (numberContainer.size() == 1 && numberContainer[0] == x)
 		return true;
 	return false;
+}
+bool BigNum::equal(vector <unsigned long long> &x) {
+	if (this->numberOfDigits() > x.size()) return false;
+	else if (this->numberOfDigits() < x.size()) return false;
+	else // here numberOfDigits()-->(=)
+	{
+		for (int i = numberOfDigits() - 1; i >= 0; i--)
+		{
+			if (this->numberContainer[i] > x[i]) return false;
+			else if (this->numberContainer[i] == x[i]) continue;
+			else return false;
+		}
+		return true; // this for equality
+	}
+
 }
 
 

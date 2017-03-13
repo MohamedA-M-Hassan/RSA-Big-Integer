@@ -41,6 +41,7 @@ public:
 	// operations
 	BigNum addOperation(const BigNum & x);
 	BigNum addOperation(vector <unsigned long long> num);
+	BigNum addOperation(int & x);
 	BigNum subOperation(BigNum x);
 	BigNum subOperation(vector <unsigned long long> num);
 	BigNum subOperation(int num);
@@ -136,6 +137,30 @@ int BigNum::numberOfDigits()const{
 void BigNum::editSpecificIndex(unsigned long long newValue, int index) {
 	numberContainer[index] = newValue;
 }
+unsigned long long BigNum::getLastDigit() {
+	return numberContainer[numberContainer.size() - 1];
+}
+BigNum BigNum::getSomeDigitsFromMostSignificant(int numOfdigits) {
+	if (numOfdigits == 1)
+	{
+		unsigned long long  tempInt = getLastDigit();
+		BigNum temp;temp.setValue(tempInt);
+		return temp;
+	}
+	if (this->numberOfDigits() <= numOfdigits) return *this;
+	BigNum temp;
+	vector<unsigned long long>thisContainer;thisContainer = this->getVectorContainer();int index = thisContainer.size() - 1;
+	vector<unsigned long long>tempContainer;	tempContainer.resize(numOfdigits);
+	while (numOfdigits != 0)
+	{
+		tempContainer[numOfdigits - 1] = thisContainer[index];
+		index--;
+		numOfdigits--;
+	}
+	temp.setValueUsingVector(tempContainer);
+	return temp;
+}
+
 // after writing it--> i discovered : to_string funcion in c++11
 string BigNum::convertLongToString(unsigned long long mylong) {
 	string mystring;
@@ -281,31 +306,21 @@ BigNum BigNum::addOperation(const BigNum & x) {
 	}
 	return z;
 }
-unsigned long long BigNum::getLastDigit() {
-	return numberContainer[numberContainer.size() - 1];
-}
-BigNum BigNum::getSomeDigitsFromMostSignificant(int numOfdigits) {
-	if (numOfdigits == 1)
-	{
-		unsigned long long  tempInt = getLastDigit();
-		BigNum temp;temp.setValue(tempInt);
-		return temp;
-	}
-	if (this->numberOfDigits() <= numOfdigits) return *this;
-	BigNum temp;
-	vector<unsigned long long>thisContainer;thisContainer = this->getVectorContainer();int index = thisContainer.size() - 1;
-	vector<unsigned long long>tempContainer;	tempContainer.resize(numOfdigits);
-	while (numOfdigits != 0)
-	{
-		tempContainer[numOfdigits - 1] = thisContainer[index];
-		index--;
-		numOfdigits--;
-	}
-	temp.setValueUsingVector(tempContainer);
-	return temp;
-}
+BigNum BigNum::addOperation(int & x) {
+	BigNum res = *this;
+	res.numberContainer[0] += x;
+	if (res.numberContainer[0] < 1000000000) return res;
+	int index = 1 ;
 
-
+	// first time will insert without checking, as i know there is a carry
+	while (true)
+	{
+		res.numberContainer[index] += 1;
+		if (res.numberContainer[index] > 999999999)
+			res.numberContainer[index] -= 1000000000,index++;
+		else return res;
+	}
+}
 BigNum BigNum::addOperation(vector <unsigned long long> num)
 {
 	BigNum z; 

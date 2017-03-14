@@ -54,8 +54,9 @@ public:
 	BigNum divOperation2(BigNum denominator);
 	BigNum divOperation(BigNum denominator);
 	BigNum powerOperation(BigNum power, BigNum modulus);
+	BigNum subWithNegativeOperation(BigNum &x, BigNum &modd);
 	BigNum extendedEUCLID(BigNum &modd);
-	
+
 	void operator=(const BigNum &m);
 	void removeLeadingZero();
 	void print();
@@ -783,6 +784,37 @@ else if n = 1  then return  x ;
 else if n is even  then return exp_by_squaring(x * x,  n / 2);
 else if n is odd  then return x * exp_by_squaring(x * x, n / 2);
 */
+BigNum BigNum::subWithNegativeOperation(BigNum &x, BigNum &modd) {
+	//
+	if (this->equal(x)) {
+		BigNum zerro; zerro.setValue(0); return(zerro);
+	}
+	BigNum num1, num2, result;
+	//  let (num1 > num2) this greate than x
+	bool flag = false;
+	if (this->greaterThan(x)) { num1 = *this; num2 = x; }
+	else { num1 = x; num2 = *this; flag = true; }
+	unsigned long long carry;
+	unsigned long long tempInt;
+	int maxDigit = num1.numberOfDigits();
+	for (int i = 0; i < maxDigit; i++)
+	{
+		if (num1.numberContainer[i] >= num2.numberContainer[i])
+			tempInt = num1.numberContainer[i] - num2.numberContainer[i];
+		else
+		{
+			// borrow from next digit
+			num1.editSpecificIndex(num1.numberContainer[i + 1] - 1, i + 1);
+			carry = 1000000000;
+			tempInt = (carry + num1.numberContainer[i]);
+			tempInt -= num2.numberContainer[i];
+		}
+		result.setValue(tempInt);
+	}
+	result.removeLeadingZero();
+	if (flag) result = modd.subOperation(result);
+	return result;
+}
 BigNum BigNum::extendedEUCLID(BigNum &modd) {
 
 	BigNum A2, A3, B2, B3, Q, T2, T3;

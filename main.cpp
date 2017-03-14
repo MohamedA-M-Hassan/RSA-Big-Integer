@@ -784,32 +784,40 @@ else if n = 1  then return  x ;
 else if n is even  then return exp_by_squaring(x * x,  n / 2);
 else if n is odd  then return x * exp_by_squaring(x * x, n / 2);
 */
-BigNum BigNum::subWithNegativeOperation(BigNum &x, BigNum &modd) {
-	//
-	if (this->equal(x)) {
-		BigNum zerro; zerro.setValue(0); return(zerro);
-	}
-	BigNum num1, num2, result;
-	//  let (num1 > num2) this greate than x
-	bool flag = false;
-	if (this->greaterThan(x)) { num1 = *this; num2 = x; }
-	else { num1 = x; num2 = *this; flag = true; }
-	unsigned long long carry;
-	unsigned long long tempInt;
-	int maxDigit = num1.numberOfDigits();
-	for (int i = 0; i < maxDigit; i++)
+BigNum BigNum::subWithNegativeOperation( BigNum &x, BigNum &modd) {
+	// let (this > x) this greater than x
+	if (this->equal(x))
 	{
-		if (num1.numberContainer[i] >= num2.numberContainer[i])
-			tempInt = num1.numberContainer[i] - num2.numberContainer[i];
-		else
+		BigNum result(0);
+		return result;
+	}
+	BigNum result , num2;
+	bool flag = false;
+	if (this->greaterThan(x)) { result = *this; num2 = x; }
+	else { result = x; num2 = *this; flag = true; }
+	int minDigit = num2.numberContainer.size();
+	int index;
+	for (int i = 0; i < minDigit; i++)
+	{
+		index = i + 1;
+		while (true)
 		{
+			if (result.numberContainer[i] >= num2.numberContainer[i])
+			{
+				result.numberContainer[i] -= num2.numberContainer[i]; break;
+			}
 			// borrow from next digit
-			num1.editSpecificIndex(num1.numberContainer[i + 1] - 1, i + 1);
-			carry = 1000000000;
-			tempInt = (carry + num1.numberContainer[i]);
-			tempInt -= num2.numberContainer[i];
+			else
+			{
+				if (result.numberContainer[index] > 0)
+					while (index > i)
+					{
+						result.numberContainer[index] -= 1, result.numberContainer[index - 1] += 1000000000;
+						index--;
+					}
+				index++;
+			}
 		}
-		result.setValue(tempInt);
 	}
 	result.removeLeadingZero();
 	if (flag) result = modd.subOperation(result);

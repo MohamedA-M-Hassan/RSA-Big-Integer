@@ -54,7 +54,8 @@ public:
 	BigNum divOperation2(BigNum denominator);
 	BigNum divOperation(BigNum denominator);
 	BigNum powerOperation(BigNum power, BigNum modulus);
-
+	BigNum extendedEUCLID(BigNum &modd);
+	
 	void operator=(const BigNum &m);
 	void removeLeadingZero();
 	void print();
@@ -782,7 +783,27 @@ else if n = 1  then return  x ;
 else if n is even  then return exp_by_squaring(x * x,  n / 2);
 else if n is odd  then return x * exp_by_squaring(x * x, n / 2);
 */
+BigNum BigNum::extendedEUCLID(BigNum &modd) {
 
+	BigNum A2, A3, B2, B3, Q, T2, T3;
+	A2.setValue(0);A3 = modd;
+	B2.setValue(1); B3 = *this;
+	while (1)
+	{
+		if (B3.equal(0))
+			cout << "no inverse";//return ;// no inverse
+		if (B3.equal(1))
+			return B2;
+		Q = A3.divOperation(B3);
+		T2 = A2.subWithNegativeOperation(Q.mulOperation(B2), modd);
+		T3 = A3.subWithNegativeOperation(Q.mulOperation(B3), modd);
+		vector <unsigned long long> temp;
+		A2.setValueUsingVector(B2.getVectorContainer());
+		A3.setValueUsingVector(B3.getVectorContainer());
+		B2.setValueUsingVector(T2.getVectorContainer());
+		B3.setValueUsingVector(T3.getVectorContainer());
+	}
+}
 
 
 void BigNum::operator=(const BigNum &m) {

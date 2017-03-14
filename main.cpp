@@ -820,7 +820,12 @@ BigNum BigNum::subWithNegativeOperation( BigNum &x, BigNum &modd) {
 		}
 	}
 	result.removeLeadingZero();
-	if (flag) result = modd.subOperation(result);
+	if (flag)
+	{
+		result = result.modOperation(modd);
+		result = modd.subOperation(result);
+	}
+		
 	return result;
 }
 BigNum BigNum::extendedEUCLID(BigNum &modd) {

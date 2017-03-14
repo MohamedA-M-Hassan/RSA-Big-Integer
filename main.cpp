@@ -516,55 +516,7 @@ BigNum BigNum::modOperation(BigNum denominator) {
 	}
 	return result;
 }
-BigNum BigNum::modOperation2(BigNum &denominator)
-{
-	if (this->equal(denominator))
-	{
-		BigNum result; result.setValue(0);
-		return result;
-	}
-	if (denominator.greaterThan(*this)) return *this;
-	BigNum numinator = *this; // it is updated each iteration in the operation main loop
-	BigNum rem; //remainder
 
-	vector<BigNum>multiplesOfDenominator; multiplesOfDenominator.reserve(4);
-	//multiplesOfDenominator			   
-	// push  1x, 2x , 4x , 8x
-	multiplesOfDenominator.push_back(denominator);
-
-	int c = 2;
-	while (c<10)// initialy 10^9
-	{
-		BigNum temp;temp.setValue(c);
-		multiplesOfDenominator.push_back(denominator.mulOperation(temp));
-		c *= 2;
-	}
-	while (true) {
-		int index = -1;
-		int tempInt = multiplesOfDenominator[0].numberOfDigits();
-		BigNum temp = numinator.getSomeDigitsFromMostSignificant(tempInt);
-		for (int i = 0; i < 4; i++)
-		{
-			if (temp.greaterThanOrEqual(multiplesOfDenominator[i]))
-			{
-				index = i;
-			}
-			else if (index == -1 && numinator.numberOfDigits() > denominator.numberOfDigits())
-			{
-				i = -1;
-				temp = numinator.getSomeDigitsFromMostSignificant(tempInt + 1);
-			}
-		}
-		//here there are 2 usage for (result) vector
-		//first usage for result:
-		vector <unsigned long long> result;//(numinator.numberOfDigits() - temp.numberOfDigits()); // initialize to zeros
-										   // second usage for result:
-		result = multiplesOfDenominator[index].getVectorContainer();
-		numinator = numinator.subOperation(result);
-		if (!numinator.greaterThan(denominator))
-			return numinator;
-	}
-}
 BigNum BigNum::divByTwo() {
 	int counter = numberContainer.size() - 1;
 	BigNum res;

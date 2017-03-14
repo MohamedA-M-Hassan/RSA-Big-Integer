@@ -875,6 +875,14 @@ void BigNum::print() {
 	}
 }
 
+BigNum enc(BigNum &msg , BigNum &n , BigNum &e) {
+	return msg.powerOperation(e, n);
+}
+
+BigNum dec(BigNum &msg, BigNum &n, BigNum &d) {
+	return msg.powerOperation(d, n);
+}
+
 ////////////////////////////////
 ///  main
 ///////////////////////////////

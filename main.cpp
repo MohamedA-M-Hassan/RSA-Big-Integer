@@ -362,37 +362,28 @@ BigNum BigNum::subOperation(BigNum x) {
 		BigNum result(0);
 		return result;
 	}
-	BigNum thisCopy=*this;
-	BigNum result;
-	unsigned long long tempInt;
-	int maxDigit=numberContainer.size();
+	BigNum result = *this;
 	int minDigit = x.numberContainer.size();
 	int index;
-	for (int  i = 0; i < maxDigit; i++)
+	for (int  i = 0; i < minDigit; i++)
 	{
-		if (i >= minDigit)
-		{
-			result.numberContainer.push_back(thisCopy.numberContainer[i]);
-			continue;
-		}
 		index = i + 1;
 		while (true)
 		{
-			if (thisCopy.numberContainer[i] >= x.numberContainer[i])
-			{	tempInt = thisCopy.numberContainer[i] - x.numberContainer[i]; break;	}
+			if (result.numberContainer[i] >= x.numberContainer[i])
+			{	result.numberContainer[i] -= x.numberContainer[i]; break;	}
 			// borrow from next digit
 			else
 			{
-				if (thisCopy.numberContainer[index] > 0)
+				if (result.numberContainer[index] > 0)
 					while (index > i)
 					{
-						thisCopy.numberContainer[index] -= 1, thisCopy.numberContainer[index - 1] += 1000000000;
+						result.numberContainer[index] -= 1, result.numberContainer[index - 1] += 1000000000;
 						index--;
 					}
 				index++;
 			}
 		}
-		result.numberContainer.push_back(tempInt);
 	}
 	result.removeLeadingZero();
 	return result;
@@ -404,39 +395,30 @@ BigNum BigNum::subOperation(vector <unsigned long long> num) {
 		BigNum result(0);
 		return result;
 	}
-	BigNum thisCopy = *this;
-	BigNum result;
-	unsigned long long tempInt;
-	int maxDigit = numberContainer.size();
+	BigNum result = *this;
 	int minDigit = num.size();
 	int index;
-	for (int i = 0; i < maxDigit; i++)
+	for (int i = 0; i < minDigit; i++)
 	{
-		if (i >= minDigit)
-		{
-			result.numberContainer.push_back(thisCopy.numberContainer[i]);
-			continue;
-		}
 		index = i + 1;
 		while (true)
 		{
-			if (thisCopy.numberContainer[i] >= num[i])
+			if (result.numberContainer[i] >= num[i])
 			{
-				tempInt = thisCopy.numberContainer[i] - num[i]; break;
+				result.numberContainer[i] -= num[i]; break;
 			}
 			// borrow from next digit
 			else
 			{
-				if (thisCopy.numberContainer[index] > 0)
+				if (result.numberContainer[index] > 0)
 					while (index > i)
 					{
-						thisCopy.numberContainer[index] -= 1, thisCopy.numberContainer[index - 1] += 1000000000;
+						result.numberContainer[index] -= 1, result.numberContainer[index - 1] += 1000000000;
 						index--;
 					}
 				index++;
 			}
 		}
-		result.numberContainer.push_back(tempInt);
 	}
 	result.removeLeadingZero();
 	return result;

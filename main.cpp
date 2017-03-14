@@ -56,7 +56,8 @@ public:
 	BigNum powerOperation(BigNum power, BigNum modulus);
 	BigNum subWithNegativeOperation(BigNum &x, BigNum &modd);
 	BigNum extendedEUCLID(BigNum &modd);
-
+	bool isPrime(const int &numOfIterations);
+	
 	void operator=(const BigNum &m);
 	void removeLeadingZero();
 	void print();
@@ -600,8 +601,7 @@ BigNum BigNum::powerOperation(BigNum power,BigNum modulus) {
 		//power.print();cout << endl;
 	}
 return result;
-}
-/*
+/* psudocode
 //function Matrix_ModExp(Matrix A, int b, int c)
 // if (b == 0):
 //     return I  // The identity matrix
@@ -619,6 +619,8 @@ else if n = 1  then return  x ;
 else if n is even  then return exp_by_squaring(x * x,  n / 2);
 else if n is odd  then return x * exp_by_squaring(x * x, n / 2);
 */
+
+}
 BigNum BigNum::subWithNegativeOperation( BigNum &x, BigNum &modd) {
 	// let (this > x) this greater than x
 	if (this->equal(x))
@@ -685,6 +687,45 @@ BigNum BigNum::extendedEUCLID(BigNum &modd) {
 		B3 = T3;
 	}
 }
+bool BigNum::isPrime(const int &numOfIterations) {
+	if (!this->greaterThan(2)) return false;
+	// if even: not prime
+	if (!this->equal(2) && numberContainer[0] % 2 == 0) return false;
+	BigNum two;two.setValue(2);
+	int k = 0;
+	// get q
+
+	BigNum temp = *this;
+
+
+	temp.editSpecificIndex(numberContainer[0] - 1, 0); // = n - 1
+	BigNum q = temp;
+	while (q.numberContainer[0] % 2 == 0)
+	{
+		q = q.divByTwo();
+		k += 1;
+	}
+	// let's begin the test
+	int tempFor_a = 4;	BigNum a, x;	a.setValue(tempFor_a);
+	for (int i = 0; i < numOfIterations; i++)
+	{
+		tempFor_a += 5; a.editSpecificIndex(tempFor_a, 0); // change (a) each iteration
+		x = a.powerOperation(q, *this);
+		if (x.equal(1) || x.equal(temp))
+		{
+			continue;
+		}
+		for (int j = 0; j < k; j++)
+		{
+			x = x.powerOperation(two, *this);
+			if (x.equal(1)) return false;
+			if (x.equal(temp))
+				continue;
+			return false;
+		}
+	}
+	return true;
+}
 
 
 void BigNum::operator=(const BigNum &m) {
@@ -709,6 +750,7 @@ void BigNum::print() {
 		i--;
 	}
 }
+
 
 BigNum enc(BigNum &msg , BigNum &n , BigNum &e) {
 	return msg.powerOperation(e, n);
